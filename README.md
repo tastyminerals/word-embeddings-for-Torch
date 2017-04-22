@@ -9,8 +9,8 @@ th word2vec.lua GoogleNews-vectors-negative300.bin
 
 - Extract pretrained embeddings only for tokens in your training corpus
 ```bash
-word2vec.lua filename.bin -r /path/to/corpus
-word2vec.lua filename.bin --reduce /path/to/corpus
+th word2vec.lua filename.bin -r /path/to/corpus
+th word2vec.lua filename.bin --reduce /path/to/corpus
 ```
 If your `/path/to/corpus` contains several **.txt** files (`train.txt`, `valid.txt`, `test.txt`) then the script will read each and create a cumulative vocabulary.
 
