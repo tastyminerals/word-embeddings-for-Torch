@@ -1,5 +1,5 @@
 #!/usr/bin/env th
---[[ Convert word embeddings .bin file to torch .t7
+--[[ Convert word2vec embeddings .bin file to torch .t7
 We can reduce the .t7 size extracting only those embeddings that exist in our training data vocab.
 If text corpus path is provided extract its vocab and reduce word embeddings dict to corpus vocab.
 The script requires ~4.5GB free RAM unless you use --reduce parameter.
@@ -7,7 +7,6 @@ The script requires ~4.5GB free RAM unless you use --reduce parameter.
 .bin to .t7 conversion code is taken from:
 
   https://github.com/rotmanmi/word2vec.torch/blob/master/bintot7.lua
-  https://github.com/rotmanmi/glove.torch/blob/master/bintot7.lua
 
 Usage:
   word2vec.lua filename.bin --> converts filename.bin to filename.t7
@@ -19,13 +18,16 @@ Usage:
 local path = require "pl.path"
 local file = require "pl.file"
 local dir = require "pl.dir"
-local stringx = require "pl.stringx"
 local utf8 = require "lua-utf8"
 
 -- handle command line args
 local bin,param,corpath = arg[1],arg[2],arg[3]
-local outfile = path.splitext(bin)..'.t7'
 assert(path.isfile(bin),"ERROR: file does not exist!")
+local outfile = path.splitext(bin)..'.t7'
+if param == "-r" or param == "--reduce" then
+  assert(path.isdir(corpath), "ERROR: path does not exist!")
+  outfile = path.splitext(bin)..'_adapted.t7'
+end
 
 
 --[[ Count tokens and return {token=cnt} map.
@@ -127,13 +129,8 @@ function word2vec_convert(vocab,vocabsize)
 end
 
 
-if param == "-r" or param == "--reduce" then
-  assert(path.isdir(corpath), "ERROR: path does not exist!")
+if corpath then
   word2vec_convert(reduce2corpus(corpath))
 else
   word2vec_convert()
 end
-
-
-
-
