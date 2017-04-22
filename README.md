@@ -4,13 +4,13 @@ Pretrained word embeddings (aka word vectors) take a lot of space and memory to 
 ### Usage
 - Convert all word2vec embeddings to **.t7**
 ```bash
-th word2vectot7.lua GoogleNews-vectors-negative300.bin  
+th word2vec.lua GoogleNews-vectors-negative300.bin  
 ```
 
 - Extract pretrained embeddings only for tokens in your training corpus
 ```bash
-bin2t7.lua filename.bin -r /path/to/corpus
-bin2t7.lua filename.bin --reduce /path/to/corpus
+word2vec.lua filename.bin -r /path/to/corpus
+word2vec.lua filename.bin --reduce /path/to/corpus
 ```
 If your `/path/to/corpus` contains several **.txt** files (`train.txt`, `valid.txt`, `test.txt`) then the script will read each and create a cumulative vocabulary.
 
