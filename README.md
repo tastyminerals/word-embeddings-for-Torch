@@ -7,7 +7,7 @@ Pretrained word embeddings (aka word vectors) take a lot of space and memory to 
 th word2vec.lua GoogleNews-vectors-negative300.bin  
 ```
 
-- Extract pretrained embeddings only for tokens in your training corpus
+- Extract and convert to **.t7** pretrained embeddings only for tokens in your training corpus
 ```bash
 th word2vec.lua filename.bin -r /path/to/corpus
 th word2vec.lua filename.bin --reduce /path/to/corpus
