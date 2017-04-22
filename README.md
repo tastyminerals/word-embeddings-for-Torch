@@ -14,5 +14,7 @@ th word2vec.lua filename.bin --reduce /path/to/corpus
 ```
 If your `/path/to/corpus` contains several **.txt** files (`train.txt`, `valid.txt`, `test.txt`) then the script will read each and create a cumulative vocabulary.
 
-Currently only [word2vec](https://code.google.com/archive/p/word2vec/) converter is ready.
+### Available Converters
+- [word2vec](https://code.google.com/archive/p/word2vec/) converter
+- [GloVe](http://nlp.stanford.edu/projects/glove/) converter
 
