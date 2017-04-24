@@ -2,7 +2,6 @@
 --[[ Convert glove embeddings .txt file to torch .t7
 We can reduce the .t7 size extracting only those embeddings that exist in our training data vocab.
 If text corpus path is provided extract its vocab and reduce word embeddings dict to corpus vocab.
-The script requires ~4.5GB free RAM unless you use --reduce parameter.
 
 Compatible GloVe embeddings:
   http://nlp.stanford.edu/data/glove.6B.zip
