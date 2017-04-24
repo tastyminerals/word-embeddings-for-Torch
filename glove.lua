@@ -79,7 +79,6 @@ function get_glove_stats(countwords)
     for first in io.lines(txt) do
       cnt = cnt + 1
     end
-    collectgarbage()
     print('done')
   end
   -- get embeddings dim
