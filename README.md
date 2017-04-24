@@ -20,7 +20,7 @@ If your `/path/to/corpus` contains several **.txt** files (`train.txt`, `valid.t
 
 ### Available Converters
 - [word2vec converter](https://raw.githubusercontent.com/tastyminerals/word-embeddings-for-Torch/master/word2vec.lua)
-- [GloVe converter](https://raw.githubusercontent.com/tastyminerals/word-embeddings-for-Torch/master/word2vec.lua)
+- [GloVe converter](https://raw.githubusercontent.com/tastyminerals/word-embeddings-for-Torch/master/glove.lua)
 
 ### Word Embeddings
 - Download [Google News (word2vec)](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?usp=sharing) (**3.4 GB**)
