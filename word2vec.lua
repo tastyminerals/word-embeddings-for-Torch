@@ -15,6 +15,11 @@ Usage:
   word2vec.lua filename.bin [-r|--reduce] /path/to/corpus --> convert filename.bin to filename_adapted.t7
     with respect to corpus vocabulary
   word2vec.lua filename.bin [-t|--tokens] --> extract and print only tokens
+
+.t7 file table structure:
+  i2w -- {idx: token}
+  tensor -- FloatTensor - size: vocabsize x 300
+  w2i -- {token: idx}
 ]]
 
 local path = require "pl.path"

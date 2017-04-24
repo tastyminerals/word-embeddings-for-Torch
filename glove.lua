@@ -12,6 +12,11 @@ Usage:
   glove.lua filename.txt [-r|--reduce] /path/to/corpus --> convert filename.txt to filename_adapted.t7
     with respect to corpus vocabulary
   glove.lua filename.txt [-t|--tokens] --> extract and print only tokens
+
+.t7 file table structure:
+  i2w -- {idx: token}
+  tensor -- FloatTensor - size: vocabsize x glove dim
+  w2i -- {token: idx}
 ]]
 
 local path = require "pl.path"
@@ -111,14 +116,14 @@ function glove_convert(vocab,vocabsize)
     local vecrep = torch.FloatTensor(embed)
     if vocabsize and vocab[word] and not w2i[word] then
       w2i[word] = row
-      i2w[row] = word
+      i2w[row] = string.lower(word) -- you'd better be working with lowercased training data
       --i2vec[row] = vecrep
       tensor[{{row},{}}] = vecrep
       row = row + 1
     end
     if not vocabsize then
       w2i[word] = idx
-      i2w[idx] = word
+      i2w[idx] = string.lower(word) -- you'd better be working with lowercased training data
       tensor[{{idx},{}}] = vecrep
       idx = idx + 1
     end
@@ -126,7 +131,7 @@ function glove_convert(vocab,vocabsize)
   print('done')
   -- write .t7
   local glove = {}
-  glove.tensor = tensor
+  glove.embeddings = tensor
   glove.w2i = w2i
   glove.i2w = i2w
   --glove.i2vec = i2vec
