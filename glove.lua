@@ -1,32 +1,33 @@
 #!/usr/bin/env th
---[[ Convert glove embeddings .bin file to torch .t7
+--[[ Convert glove embeddings .txt file to torch .t7
 We can reduce the .t7 size extracting only those embeddings that exist in our training data vocab.
 If text corpus path is provided extract its vocab and reduce word embeddings dict to corpus vocab.
 The script requires ~4.5GB free RAM unless you use --reduce parameter.
 
-.bin to .t7 conversion code is taken from:
-
-  https://github.com/rotmanmi/glove.torch
+Compatible GloVe embeddings:
+  http://nlp.stanford.edu/data/glove.6B.zip
+  http://nlp.stanford.edu/data/glove.840B.300d.zip
 
 Usage:
-  glove.lua filename.bin --> converts filename.bin to filename.t7
-  glove.lua filename.bin [-r|--reduce] /path/to/corpus --> convert filename.bin to filename_adapted.t7
+  glove.lua filename.txt --> converts filename.txt to filename.t7
+  glove.lua filename.txt [-r|--reduce] /path/to/corpus --> convert filename.txt to filename_adapted.t7
     with respect to corpus vocabulary
-
+  glove.lua filename.txt [-t|--tokens] --> extract and print only tokens
 ]]
 
 local path = require "pl.path"
 local file = require "pl.file"
 local dir = require "pl.dir"
+local stringx = require "pl.stringx"
 local utf8 = require "lua-utf8"
 
 -- handle command line args
-local bin,param,corpath = arg[1],arg[2],arg[3]
-assert(path.isfile(bin),"ERROR: file does not exist!")
-local outfile = path.splitext(bin)..'.t7'
+local txt,param,corpath = arg[1],arg[2],arg[3]
+assert(path.isfile(txt),string.format('ERROR: "%s" file does not exist!',txt))
+local outfile = path.splitext(txt)..'.t7'
 if param == "-r" or param == "--reduce" then
-  assert(path.isdir(corpath), "ERROR: path does not exist!")
-  outfile = path.splitext(bin)..'_adapted.t7'
+  assert(path.isdir(corpath),string.format('ERROR: "%s" path does not exist!',corpath))
+  outfile = path.splitext(txt)..'_adapted.t7'
 end
 
 
@@ -45,18 +46,11 @@ function build_vocab(text)
   return vocab
 end
 
-function glove_dims(diskfile)
-  local encodingsize = -1
-  local ctr = 0
-  for line in io.lines(diskfile) do
-    if ctr == 0 then
-      for i in string.gmatch(line, "%S+") do
-        encodingsize = encodingsize + 1
-      end
-    end
-    ctr = ctr + 1
+-- read only tokens
+function extract_glove_tokens()
+  for line in io.lines(txt) do
+    print(utf8.match(line,"%S+"))
   end
-  return ctr,encodingsize
 end
 
 function reduce2corpus(corpath)
@@ -76,10 +70,31 @@ function reduce2corpus(corpath)
   return vocab, size
 end
 
+-- compute glove embeddings cnt and dim
+function get_glove_stats(countwords)
+  if countwords then
+    print('counting words...')
+    -- get embeddings cnt
+    local cnt = 0
+    for first in io.lines(txt) do
+      cnt = cnt + 1
+    end
+    collectgarbage()
+    print('done')
+  end
+  -- get embeddings dim
+  local dim = 300 -- default
+  for first in io.lines(txt) do
+    dim = #stringx.split(first)-1 -- -1 for token column
+    break
+  end
+  return cnt,dim
+end
+
 -- convert glove .bin to .t7, reduce to vocabsize if given
 function glove_convert(vocab,vocabsize)
-  local diskfile = torch.DiskFile(bin,'r')
-  local words,dim = glove_dims(diskfile)
+  local words,dim = get_glove_stats(vocabsize)
+  print('converting...')
   local w2i = {} -- word to index map
   local i2w = {} -- index to word map
   local tensor
@@ -89,21 +104,13 @@ function glove_convert(vocab,vocabsize)
   else
     tensor = torch.FloatTensor(words,dim)
   end
-  -- reading contents into tensor
+  -- use separate counters
+  local row = 1
   local idx = 1
-  local row = 1 -- reduced .t7 needs a separate index
-  for line in io.lines(opt.binfilename) do
-    local vecrep = {}
-    for i in string.gmatch(line, "%S+") do
-      table.insert(vecrep, i)
-    end
-    str = vecrep[1]
-    table.remove(vecrep,1)
-    vecrep = torch.FloatTensor(vecrep)
-
-    local norm = torch.norm(vecrep,2)
-    if norm ~= 0 then vecrep:div(norm) end
-
+  for line in io.lines(txt) do
+    local embed = stringx.split(line,' ')
+    local word = table.remove(embed,1)
+    local vecrep = torch.FloatTensor(embed)
     if vocabsize and vocab[word] and not w2i[word] then
       w2i[word] = row
       i2w[row] = word
@@ -112,13 +119,13 @@ function glove_convert(vocab,vocabsize)
       row = row + 1
     end
     if not vocabsize then
-      w2vvocab[str] = idx
-      v2wvocab[idx] = str
+      w2i[word] = idx
+      i2w[idx] = word
       tensor[{{idx},{}}] = vecrep
       idx = idx + 1
     end
   end
-
+  print('done')
   -- write .t7
   local glove = {}
   glove.tensor = tensor
@@ -129,8 +136,9 @@ function glove_convert(vocab,vocabsize)
   torch.save(outfile,glove)
 end
 
-
-if corpath then
+if param == '--tokens' or param == '-t' then
+  extract_glove_tokens()
+elseif corpath then
   glove_convert(reduce2corpus(corpath))
 else
   glove_convert()
