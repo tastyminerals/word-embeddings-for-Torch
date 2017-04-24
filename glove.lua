@@ -70,8 +70,8 @@ function reduce2corpus(corpath)
 end
 
 -- compute glove embeddings cnt and dim
-function get_glove_stats(countwords)
-  if countwords then
+function get_glove_stats(counted)
+  if not counted then
     print('counting words...')
     -- get embeddings cnt
     local cnt = 0
