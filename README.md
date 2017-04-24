@@ -27,4 +27,4 @@ If your `/path/to/corpus` contains several **.txt** files (`train.txt`, `valid.t
 
 - Download [GloVe - Wikipedia 2014 + Gigaword 5 (6B tokens, 400K vocab, uncased, 50d, 100d, 200d, & 300d vectors, 822 MB download)](http://nlp.stanford.edu/data/glove.6B.zip)
 
-- Download [GloVe - Common Crawl (840B tokens, 2.2M vocab, cased, 300d vectors, 2.03 GB download)](http://nlp.stanford.edu/data/glove.840B.300d.zip()
+- Download [GloVe - Common Crawl (840B tokens, 2.2M vocab, cased, 300d vectors, 2.03 GB download)](http://nlp.stanford.edu/data/glove.840B.300d.zip)
