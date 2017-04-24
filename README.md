@@ -25,6 +25,6 @@ If your `/path/to/corpus` contains several **.txt** files (`train.txt`, `valid.t
 ### Word Embeddings
 - Download [Google News (word2vec)](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?usp=sharing)
 
-- Download [GloVe - Wikipedia 2014 + Gigaword 5 (6B tokens, 400K vocab, uncased, 50d, 100d, 200d, & 300d vectors, 822 MB download)](http://nlp.stanford.edu/data/glove.6B.zip)
+- Download [GloVe - Wikipedia 2014 + Gigaword 5](http://nlp.stanford.edu/data/glove.6B.zip) (6B tokens, 400K vocab, uncased, 50d, 100d, 200d, & 300d vectors, 822 MB download)
 
-- Download [GloVe - Common Crawl (840B tokens, 2.2M vocab, cased, 300d vectors, 2.03 GB download)](http://nlp.stanford.edu/data/glove.840B.300d.zip)
+- Download [GloVe - Common Crawl](http://nlp.stanford.edu/data/glove.840B.300d.zip) (840B tokens, 2.2M vocab, cased, 300d vectors, 2.03 GB download)]
