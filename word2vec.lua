@@ -15,7 +15,7 @@ Usage:
   word2vec.lua filename.bin [-r|--reduce] /path/to/corpus --> convert filename.bin to filename_adapted.t7
     with respect to corpus vocabulary
   word2vec.lua filename.bin [-t|--tokens] --> extract and print only tokens
-  word2vec.lua filename.bin [-tf|--tokens-full] --> extract and print tokens and their corresponding vector
+  word2vec.lua filename.bin [-tv|--tokens-vec] --> extract and print tokens and their corresponding vector
 
 .t7 file table structure:
   i2w -- {idx: token}
@@ -180,7 +180,7 @@ end
 
 if param == '-t' or param == '--tokens' then
   extract_word2vec_tokens()
-elseif param == '-tf' or param == '--tokens-full' then
+elseif param == '-tv' or param == '--tokens-vec' then
   extract_word2vec_tokens_full()
 elseif corpath then
   word2vec_convert(reduce2corpus(corpath))
