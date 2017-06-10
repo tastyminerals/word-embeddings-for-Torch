@@ -15,6 +15,7 @@ Usage:
   word2vec.lua filename.bin [-r|--reduce] /path/to/corpus --> convert filename.bin to filename_adapted.t7
     with respect to corpus vocabulary
   word2vec.lua filename.bin [-t|--tokens] --> extract and print only tokens
+  word2vec.lua filename.bin [-tf|--tokens-full] --> extract and print tokens and their corresponding vector
 
 .t7 file table structure:
   i2w -- {idx: token}
@@ -64,6 +65,30 @@ function read_word(diskfile,max_w)
   end
   str = torch.CharStorage(str)
   return str:string()
+end
+
+function extract_word2vec_tokens_full()
+  local diskfile = torch.DiskFile(bin,'r')
+  local max_w = 50
+  -- reading header
+  diskfile:ascii()
+  -- read .bin sizes
+  local words = diskfile:readInt()
+  local dim = diskfile:readInt() -- word2vec uses 300
+  -- reading contents into tensor
+  diskfile:binary()
+  local row = 1 -- reduced .t7 needs a separate index
+  for i = 1,words do
+    local word = read_word(diskfile,max_w)
+    local tensor = diskfile:readFloat(300)
+    io.write(word)
+    io.write(' ')
+    for i=1, tensor:size(1) do
+      io.write(tensor[i])
+      io.write(' ')
+    end
+    io.write('\n')
+  end
 end
 
 function extract_word2vec_tokens()
@@ -155,6 +180,8 @@ end
 
 if param == '-t' or param == '--tokens' then
   extract_word2vec_tokens()
+elseif param == '-tf' or param == '--tokens-full' then
+  extract_word2vec_tokens_full()
 elseif corpath then
   word2vec_convert(reduce2corpus(corpath))
 else
