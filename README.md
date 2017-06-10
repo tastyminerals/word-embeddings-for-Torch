@@ -1,6 +1,8 @@
 # word-embeddings-for-Torch
 Pretrained word embeddings (aka word vectors) take a lot of space and memory to process. Moreover, many of these pretrained embeddings come in **.bin** format with different data layouts or structure (GloVe vs word2vec). These scripts allow you to convert **.bin** embeddings to **.t7** format for easy load and use in [Torch](http://torch.ch/). In addition you can reduce the size of **.t7** file by fitting to your training corpus vocabulary.
 
+The script requires ~4.5GB free RAM unless you use `[-r|--reduce]` parameter.
+
 ### Usage
 Convert all word2vec embeddings to **.t7**
 ```bash
