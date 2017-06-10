@@ -3,6 +3,15 @@ Pretrained word embeddings (aka word vectors) take a lot of space and memory to 
 
 The script requires ~4.5GB free RAM unless you use `[-r|--reduce]` parameter.
 
+### Torch (.t7) file output format
+```lua
+{
+  i2w -- {idx: token}
+  tensor -- FloatTensor - size: vocabsize x 300
+  w2i -- {token: idx}
+}
+```
+
 ### Usage
 Convert all word2vec embeddings to **.t7**
 ```bash
