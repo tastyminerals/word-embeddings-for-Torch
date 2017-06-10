@@ -16,6 +16,12 @@ Extract and print tokens only
 ```bash
 th word2vec.lua filename.bin -t
 ```
+
+Extract and print tokens + their corresponding vector represenataions to stdout
+```bash
+th word2vec.lua filename.bin -tf
+```
+
 If your `/path/to/corpus` contains several **.txt** files (`train.txt`, `valid.txt`, `test.txt`) then the script will read each and create a cumulative vocabulary.
 
 ### Available Converters
