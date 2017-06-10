@@ -35,6 +35,6 @@ If your `/path/to/corpus` contains several **.txt** files (`train.txt`, `valid.t
 
 - Download [GloVe - Common Crawl](http://nlp.stanford.edu/data/glove.840B.300d.zip) (840B tokens, 2.2M vocab, cased, 300d vectors, **2.03 GB**)]
 
-### Loading .t7 files in Python
+### Loading Torch (.t7) files in Python
 Check out [python-torchfile](https://github.com/bshillingford/python-torchfile).
 
